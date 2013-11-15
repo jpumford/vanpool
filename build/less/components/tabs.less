@@ -1,0 +1,179 @@
+/**
+  Class: .tabs
+  Provides navigation tabs
+*/
+
+.tabs {
+  .tab-focus(@tab_type) {
+    outline: none;
+    border: @px solid @focus-border-color;
+  }
+
+  .tab-focus(@tab_type) when (@tab_type = top) {
+    @shadow: -@partial-glow-radius -@partial-glow-radius/2 @partial-glow-radius @partial-glow-color,
+        @partial-glow-radius -@partial-glow-radius/2 @partial-glow-radius @partial-glow-color;
+    .box-shadow(@shadow);
+    border-bottom: none;
+  }
+
+  .tab-focus(@tab_type) when (@tab_type = stacked) {
+    @shadow: -@partial-glow-radius/2 -@partial-glow-radius @partial-glow-radius @partial-glow-color,
+    -@partial-glow-radius/2 @partial-glow-radius @partial-glow-radius @partial-glow-color;
+    .box-shadow(@shadow);
+    border-right: none;
+  }
+
+  > nav {
+    .clearfix();
+    z-index: 1;
+    position: relative;
+
+    > a {
+      .light-text;
+      color: @tab-active-font-color;
+      float: left;
+      padding: 0.5rem 0.75rem 0.5rem 0.75rem;
+      margin: 0 0.125rem -0.0625rem 0;
+      white-space: nowrap;
+
+      &.active {
+        border: 0.0625rem solid @tab-outline-color;
+        border-bottom: none;
+        .gradient(@tab-background-gradient-start-color, @tab-background-gradient-end-color);
+      }
+
+      &.active, &:hover {
+        text-decoration: none;
+      }
+
+      &.disabled {
+        color: @tab-disabled-font-color;
+        text-decoration: none;
+        opacity: 1;
+
+        &:hover,
+        &:focus {
+          cursor: default;
+          color: @tab-disabled-font-color;
+          text-decoration: none;
+        }
+      }
+
+      &:hover,
+      &:focus {
+        color: @tab-hover-font-color;
+      }
+
+      &.active {
+        .regularText;
+        color: @tab-active-font-color;
+        
+        &:focus {
+          .tab-focus(top);
+        }
+      }
+    }
+  }
+
+  > section {
+    display: none;
+    background-color: @tab-background-gradient-end-color;
+    margin: 0;
+    border: 0.0625rem solid @tab-outline-color;
+    padding: 0.85rem;
+    z-index: auto;
+    position: relative;
+
+    &.active {
+      display: block;
+    }
+  }
+
+  &.noscroll > section {
+    overflow: visible;
+  }
+
+  &.white {
+    > nav > a.active {
+      border-bottom: none;
+      .gradient(@tab-white-background-gradient-start-color, @tab-white-background-gradient-end-color);
+    }
+
+    > section {
+      background-color: @tab-white-background-gradient-end-color;
+    }
+  }
+
+  &.nav {
+    > nav {
+      border-bottom: 0.0625rem solid @tab-outline-color;
+
+      > a {
+        font-size: @tab-nav-font-size;
+        margin-bottom: -0.125rem; // TODO breaks slightly at higher base font sizes
+
+        &.active {
+          .gradient(lighten(@body-background-color, 7%), @body-background-color);
+          border-bottom: 2px solid @body-background-color;
+        }
+
+        &:first-child {
+          margin-left: 1.25rem;
+        }
+      }
+    }
+
+    > section {
+      border-left: none;
+      border-right: none;
+      border-bottom: none;
+      border-color: @tab-nav-second-border-color;
+      background-color: @body-background-color;
+    }
+  }
+
+  /* Full page tabs need some more space above to not stick at the top of the page */
+  &.full-page {
+    margin-top: 0.625rem;
+  }
+
+  &.stacked {
+    display: table;
+
+    > nav {
+      float: left;
+      display: table-cell;
+
+      > a {
+        float: none;
+        display: block;
+        margin: 0 -0.0625rem 0.125rem 0;
+
+        &.active {
+          border-bottom: 0.0625rem solid @tab-outline-color;
+          border-right: none;
+          .gradient(@tab-white-background-gradient-end-color, @tab-white-background-gradient-end-color);
+          &:focus {
+            .tab-focus(stacked);
+          }
+        }
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+
+    > section {
+      float: none;
+      clear: none;
+      background-color: @tab-white-background-gradient-end-color;
+
+      &.active {
+        display: table-cell;
+        vertical-align: top;
+        width: 100%;
+      }
+    }
+  }
+}
